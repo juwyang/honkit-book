@@ -1,0 +1,32 @@
+name: Deploy HonKit Book
+
+on:
+  push:
+    branches:
+      - main # 或者你的主分支名
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18' # 或者你需要的 Node.js 版本
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build HonKit book
+        run: npm run build # 假设你的 package.json 有 build 脚本: "honkit build"
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_book
+          
